@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Picks — Koleksi Favorit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F4F0;
+    --cream: #EDE8E0;
+    --dark: #1A1714;
+    --mid: #5C5752;
+    --accent: #E85D26;
+    --card: #FFFFFF;
+    --border: #DDD8D0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--dark);
+    color: #fff;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--accent); font-style: italic; }
+
+  .header-sub {
+    font-size: 12px;
+    color: #aaa;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--dark);
+    color: #fff;
+    padding: 56px 24px 48px;
+    text-align: center;
+    border-bottom: 3px solid var(--accent);
+  }
+
+  .hero-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #f5a623);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 16px;
+    border: 3px solid rgba(255,255,255,0.2);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 42px);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 em { color: var(--accent); font-style: italic; }
+
+  .hero p {
+    color: #aaa;
+    font-size: 14px;
+    max-width: 360px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* FILTER */
+  .filter-bar {
+    padding: 20px 24px 4px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--mid);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .filter-btn.active,
+  .filter-btn:hover {
+    background: var(--dark);
+    color: #fff;
+    border-color: var(--dark);
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    padding: 24px 24px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-style: italic;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* PRODUCT GRID */
+  .grid {
+    padding: 0 16px 40px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  @media (min-width: 600px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (min-width: 900px) {
+    .grid { grid-template-columns: repeat(4, 1fr); padding: 0 24px 40px; }
+  }
+
+  /* PRODUCT CARD */
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  }
+
+  .card-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #ccc;
+    position: relative;
+  }
+
+  .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .badge.sale { background: #2ecc71; }
+  .badge.new { background: #3b82f6; }
+
+  .card-body { padding: 12px; }
+
+  .card-cat {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .card-name {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .card-price .original {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: #bbb;
+    text-decoration: line-through;
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  .card-footer {
+    padding: 0 12px 12px;
+  }
+
+  .btn-shopee {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 9px;
+    background: #EE4D2D;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-shopee:hover { background: #d44426; }
+
+  .shopee-icon {
+    width: 14px;
+    height: 14px;
+    fill: #fff;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: #888;
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  footer strong { color: #fff; }
+
+  /* EMPTY STATE */
+  .empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mid);
+  }
+
+  .empty-icon { font-size: 48px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">My<span>Picks</span></div>
+  <div class="header-sub">Affiliate Collection</div>
+</header>
+
+<section class="hero">
+  <div class="hero-avatar">✨</div>
+  <h1>Koleksi <em>Favorit</em><br>Pilihan Ku</h1>
+  <p>Produk-produk yang sudah aku pakai & rekomendasikan. Semua tersedia di Shopee!</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num" id="total-count">12</div>
+      <div class="stat-label">Produk</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5★</div>
+      <div class="stat-label">Rating</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Tested</div>
+    </div>
+  </div>
+</section>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterProducts('all', this)">Semua</button>
+  <button class="filter-btn" onclick="filterProducts('fashion', this)">Fashion</button>
+  <button class="filter-btn" onclick="filterProducts('skincare', this)">Skincare</button>
+  <button class="filter-btn" onclick="filterProducts('gadget', this)">Gadget</button>
+  <button class="filter-btn" onclick="filterProducts('rumah', this)">Rumah</button>
+</div>
+
+<div class="section-label">
+  <h2>Rekomendasi Terbaru</h2>
+</div>
+
+<div class="grid" id="product-grid">
+  <!-- Produk di-render lewat JS -->
+</div>
+
+<footer>
+  <strong>MyPicks</strong> — Curated Affiliate Collection<br>
+  Link produk adalah link afiliasi Shopee.<br>
+  Kami mendapat komisi kecil jika kamu membeli melalui link ini 🧡
+</footer>
+
+<script>
+// ============================================================
+// DATA PRODUK — Edit bagian ini untuk menambah/ubah produk
+// Format: { name, category, price, originalPrice, badge, emoji, link, tag }
+// link: isi dengan link affiliate Shopee kamu
+// ============================================================
+const products = [
+  {
+    name: "Sunscreen SPF 50 PA++++ Daily Moisturizer",
+    category: "skincare",
+    price: "Rp 45.000",
+    originalPrice: "Rp 89.000",
+    badge: "sale",
+    badgeText: "SALE",
+    emoji: "🧴",
+    link: "https://shopee.co.id/", // ganti dengan link affiliate
+    tag: "Skincare"
+  },
+  {
+    name: "Celana Cargo Oversize Premium Cotton",
+    category: "fashion",
+    price: "Rp 185.000",
+    originalPrice: null,
+    badge: "new",
+    badgeText: "NEW",
+    emoji: "👖",
+    link: "https://shopee.co.id/",
+    tag: "Fashion"
+  },
+  {
+    name: "Toner Niacinamide 10% Pore Minimizer",
+    category: "skincare",
+    price: "Rp 38.000",
+    originalPrice: "Rp 65.000",
+    badge: "sale",
+    badgeText: "SALE",
+    emoji: "💧",
+    link: "https://shopee.co.id/",
+    tag: "Skincare"
+  },
+  {
+    name: "Stand Fan Mini USB Portable Desk Fan",
+    category: "gadget",
+    price: "Rp 75.000",
+    originalPrice: null,
+    badge: null,
+    badgeText: null,
+    emoji: "🌀",
+    link: "https://shopee.co.id/",
+    tag: "Gadget"
+  },
+  {
+    name: "Aesthetic Candle Holder Rattan Boho",
+    category: "rumah",
+    price: "Rp 32.000",
+    originalPrice: null,
+    badge: null,
+    badgeText: null,
+    emoji: "🕯️",
+    link: "https://shopee.co.id/",
+    tag: "Rumah"
+  },
+  {
+    name: "Kaos Oversize Washed Vintage Effect",
+    category: "fashion",
+    price: "Rp 125.000",
+    originalPrice: "Rp 199.000",
+    badge: "sale",
+    badgeText: "SALE",
+    emoji: "👕",
+    link: "https://shopee.co.id/",
+    tag: "Fashion"
+  },
+  {
+    name: "Serum Vitamin C Brightening 20%",
+    category: "skincare",
+    price: "Rp 55.000",
+    originalPrice: null,
+    badge: "new",
+    badgeText: "NEW",
+    emoji: "✨",
+    link: "https://shopee.co.id/",
+    tag: "Skincare"
+  },
+  {
+    name: "Wireless Earbuds TWS Bluetooth 5.3",
+    category: "gadget",
+    price: "Rp 95.000",
+    originalPrice: "Rp 175.000",
+    badge: "sale",
+    badgeText: "SALE",
+    emoji: "🎧",
+    link: "https://shopee.co.id/",
+    tag: "Gadget"
+  },
+  {
+    name: "Tote Bag Canvas Print Aesthetic",
+    category: "fashion",
+    price: "Rp 65.000",
+    originalPrice: null,
+    badge: null,
+    badgeText: null,
+    emoji: "👜",
+    link: "https://shopee.co.id/",
+    tag: "Fashion"
+  },
+  {
+    name: "Rak Dinding Kayu Floating Shelf",
+    category: "rumah",
+    price: "Rp 42.000",
+    originalPrice: null,
+    badge: null,
+    badgeText: null,
+    emoji: "🪵",
+    link: "https://shopee.co.id/",
+    tag: "Rumah"
+  },
+  {
+    name: "Moisturizer Ceramide Barrier Repair",
+    category: "skincare",
+    price: "Rp 72.000",
+    originalPrice: "Rp 120.000",
+    badge: "sale",
+    badgeText: "SALE",
+    emoji: "🫙",
+    link: "https://shopee.co.id/",
+    tag: "Skincare"
+  },
+  {
+    name: "Phone Stand Holder Meja Adjustable",
+    category: "gadget",
+    price: "Rp 28.000",
+    originalPrice: null,
+    badge: null,
+    badgeText: null,
+    emoji: "📱",
+    link: "https://shopee.co.id/",
+    tag: "Gadget"
+  },
+];
+
+let activeFilter = 'all';
+
+function renderProducts(filter) {
+  const grid = document.getElementById('product-grid');
+  const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+
+  document.getElementById('total-count').textContent = products.length;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><p>Belum ada produk di kategori ini</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => `
+    <a class="card" href="${p.link}" target="_blank" rel="noopener noreferrer">
+      <div class="card-img">
+        ${p.badge ? `<span class="badge ${p.badge}">${p.badgeText}</span>` : ''}
+        <span style="font-size:56px;">${p.emoji}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${p.tag}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-price">
+          ${p.price}
+          ${p.originalPrice ? `<span class="original">${p.originalPrice}</span>` : ''}
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="btn-shopee">
+          <svg class="shopee-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C9.24 2 7 4.24 7 7H5C3.9 7 3 7.9 3 9l1 13h16L21 9c0-1.1-.9-2-2-2h-2c0-2.76-2.24-5-5-5zm0 2c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3z"/>
+          </svg>
+          Beli di Shopee
+        </span>
+      </div>
+    </a>
+  `).join('');
+}
+
+function filterProducts(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+
+// Initial render
+renderProducts('all');
+</script>
+</body>
+</html>
